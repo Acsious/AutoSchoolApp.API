@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace AutoSchoolApp.API.Data.Entities;
+namespace AutoSchoolApp.API.Models;
 
 public partial class DrivingDbContext : DbContext
 {

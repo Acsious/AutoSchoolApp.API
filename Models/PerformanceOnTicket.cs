@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AutoSchoolApp.API.Data.Entities;
+namespace AutoSchoolApp.API.Models;
 
-public partial class PerformanceOnQuestion
+public partial class PerformanceOnTicket
 {
     public int Id { get; set; }
 
@@ -11,9 +11,11 @@ public partial class PerformanceOnQuestion
 
     public int UserId { get; set; }
 
-    public int QuestionId { get; set; }
+    public int TicketId { get; set; }
 
-    public virtual Question Question { get; set; } = null!;
+    public DateOnly? SolveDate { get; set; }
+
+    public virtual Ticket Ticket { get; set; } = null!;
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

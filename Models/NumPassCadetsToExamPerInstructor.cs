@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AutoSchoolApp.API.Data.Entities;
+namespace AutoSchoolApp.API.Models;
 
 public partial class NumPassCadetsToExamPerInstructor
 {
