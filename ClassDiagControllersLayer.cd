@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AutoSchoolApp.API.Controllers.SignUpForDrivingsController">
+    <Position X="2" Y="1" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABBACAAAEAAAAAAAEAAEACAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\SignUpForDrivingsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AutoSchoolApp.API.Controllers.UsersController">
+    <Position X="4.5" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABBQCAAAAAAAAAAAEAAEACAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\UsersController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AutoSchoolApp.API.Controllers.PerformanceOnTicketsController">
+    <Position X="6.75" Y="1" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABBACAAAAAAAAAAAEAAEADAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\PerformanceOnTicketsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AutoSchoolApp.API.Controllers.PerformanceOnQuestionsController">
+    <Position X="9.5" Y="1" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABBACAAAAAAAAAAAEAAEACAAEAACAAAAA=</HashCode>
+      <FileName>Controllers\PerformanceOnQuestionsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
