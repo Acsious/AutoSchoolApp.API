@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoSchoolApp.API.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AutoSchoolApp.API.Models;
 
 namespace AutoSchoolApp.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class SignUpForDrivingsController : Controller
     {
         private readonly DrivingDbContext _context;
@@ -18,152 +15,54 @@ namespace AutoSchoolApp.API.Controllers
             _context = context;
         }
 
-        // GET: SignUpForDrivings
-        public async Task<IActionResult> Index()
+        [HttpPost("MakeSignUpForDriving")]
+        public async Task<ActionResult<SignUpForDriving>> Create(DateOnly date, TimeOnly time, int cadetId, int instructorId)
         {
-            var drivingDbContext = _context.SignUpForDrivings.Include(s => s.Schedule).Include(s => s.User);
-            return View(await drivingDbContext.ToListAsync());
-        }
+            var classes = await _context.Classes.ToListAsync();
+            int classId = classes.Find(x => x.ClassTime == time).Id;
 
-        // GET: SignUpForDrivings/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            Schedule schedule = new()
             {
-                return NotFound();
-            }
+                Date = date,
+                ClassesId = classId,
+                InstructorId = instructorId
+            };
 
-            var signUpForDriving = await _context.SignUpForDrivings
-                .Include(s => s.Schedule)
-                .Include(s => s.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (signUpForDriving == null)
+            SignUpForDriving signUpForDriving = new()
             {
-                return NotFound();
-            }
+                ScheduleId = schedule.Id,
+                UserId = cadetId
+            };
 
-            return View(signUpForDriving);
-        }
+            if (Helper.IsExists(ref signUpForDriving, _context.SignUpForDrivings.ToList()))
+                return Ok(signUpForDriving);
 
-        // GET: SignUpForDrivings/Create
-        public IActionResult Create()
-        {
-            ViewData["ScheduleId"] = new SelectList(_context.Schedules, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
-        }
-
-        // POST: SignUpForDrivings/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ScheduleId,UserId")] SignUpForDriving signUpForDriving)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(signUpForDriving);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ScheduleId"] = new SelectList(_context.Schedules, "Id", "Id", signUpForDriving.ScheduleId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", signUpForDriving.UserId);
-            return View(signUpForDriving);
-        }
-
-        // GET: SignUpForDrivings/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var signUpForDriving = await _context.SignUpForDrivings.FindAsync(id);
-            if (signUpForDriving == null)
-            {
-                return NotFound();
-            }
-            ViewData["ScheduleId"] = new SelectList(_context.Schedules, "Id", "Id", signUpForDriving.ScheduleId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", signUpForDriving.UserId);
-            return View(signUpForDriving);
-        }
-
-        // POST: SignUpForDrivings/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ScheduleId,UserId")] SignUpForDriving signUpForDriving)
-        {
-            if (id != signUpForDriving.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(signUpForDriving);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SignUpForDrivingExists(signUpForDriving.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ScheduleId"] = new SelectList(_context.Schedules, "Id", "Id", signUpForDriving.ScheduleId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", signUpForDriving.UserId);
-            return View(signUpForDriving);
-        }
-
-        // GET: SignUpForDrivings/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var signUpForDriving = await _context.SignUpForDrivings
-                .Include(s => s.Schedule)
-                .Include(s => s.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (signUpForDriving == null)
-            {
-                return NotFound();
-            }
-
-            return View(signUpForDriving);
-        }
-
-        // POST: SignUpForDrivings/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var signUpForDriving = await _context.SignUpForDrivings.FindAsync(id);
-            if (signUpForDriving != null)
-            {
-                _context.SignUpForDrivings.Remove(signUpForDriving);
-            }
-
+            _context.SignUpForDrivings.Add(signUpForDriving);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Ok(signUpForDriving);
         }
 
-        private bool SignUpForDrivingExists(int id)
+        [HttpDelete("RemoveSignUpForDriving")]
+        public async Task<ActionResult<SignUpForDriving>> Delete(DateOnly date, TimeOnly time, int cadetId, int instructorId)
         {
-            return _context.SignUpForDrivings.Any(e => e.Id == id);
+            var delClass = _context.Classes.FirstOrDefault(x => x.ClassTime == time);
+            var schedule = _context.Schedules.FirstOrDefault(x => x.Date == date && x.ClassesId == delClass.Id && x.InstructorId == instructorId);
+
+            if (schedule == null)
+            {
+                return NotFound();
+            }
+
+            var signUpForDriving = _context.SignUpForDrivings.FirstOrDefault(x => x.Schedule.Id == schedule.Id && x.UserId == cadetId);
+
+            if (signUpForDriving == null)
+            {
+                return NotFound();
+            }
+
+            _context.SignUpForDrivings.Remove(signUpForDriving);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
     }
 }
