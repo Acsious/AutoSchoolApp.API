@@ -1,12 +1,12 @@
 using AutoSchoolApp.API.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<DrivingDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DrivingConnection") ?? throw new InvalidOperationException("Database connection string 'DrivingConnection' is not found"));
